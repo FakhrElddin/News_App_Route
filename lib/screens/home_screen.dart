@@ -37,6 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
       )
           : TabsSection(
         categoryName: selectedCategory!,
+        onPressed: onBack,
       ),
     );
   }

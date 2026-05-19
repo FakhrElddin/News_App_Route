@@ -28,8 +28,12 @@ class HomeCubit extends Cubit<HomeStates> {
       http.Response response = await http.get(url);
       var json = jsonDecode(response.body);
       sourcesResponse = SourcesResponseModel.fromJson(json);
-      emit(GetSourcesSuccessState());
-      await getNews();
+      if(sourcesResponse!.status == 'ok'){
+        emit(GetSourcesSuccessState());
+        await getNews();
+      } else{
+        emit(GetSourcesErrorState(errorMessage: sourcesResponse?.message ?? 'Something Went Wrong, Try Again Later'));
+      }
     } catch (e) {
       emit(GetSourcesErrorState(errorMessage: e.toString()));
     }
@@ -45,7 +49,11 @@ class HomeCubit extends Cubit<HomeStates> {
       http.Response response = await http.get(url);
       var json = jsonDecode(response.body);
       newsResponse = NewsResponseModel.fromJson(json);
-      emit(GetNewsSuccessState());
+      if(newsResponse!.status == 'ok'){
+        emit(GetNewsSuccessState());
+      } else{
+        emit(GetNewsErrorState(errorMessage: newsResponse?.message ?? 'Something Went Wrong, Try Again Later'));
+      }
     }catch(e){
       emit(GetNewsErrorState(errorMessage: e.toString()));
     }

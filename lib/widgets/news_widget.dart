@@ -10,28 +10,54 @@ class NewsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<HomeCubit, HomeStates>(
+    return BlocConsumer<HomeCubit, HomeStates>(
+      listener: (context, state) {
+        if(state is GetNewsErrorState){
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text(
+                'Something Went Wrong',
+                style: TextStyle(
+                  color: Color(0xff171717),
+                ),
+              ),
+              content: Text(
+                state.errorMessage!,
+                style: TextStyle(
+                  color: Color(0xff171717),
+                ),
+              ),
+              actions: [
+                ElevatedButton(
+                  onPressed: (){
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    'OK',
+                    style: TextStyle(
+                      color: Color(0xff171717),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
+      },
       builder: (context, state) {
         var homeCubit = BlocProvider.of<HomeCubit>(context);
         if(state is GetNewsLoadingState){
           return Center(
             child: CircularProgressIndicator(color: Color(0xff171717)),
           );
-        } else if(state is GetNewsErrorState){
-          return Center(
-            child: Text(
-              'Get News Articles Error, ${state.errorMessage}, Try Again Later',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-          );
-        } else{
-          return ListView.separated(
+        }
+        return ListView.separated(
             itemBuilder: (context, index) =>
                 NewsItem(articles: homeCubit.newsResponse!.articles![index]),
             separatorBuilder: (context, index) => SizedBox(height: 16),
             itemCount: homeCubit.newsResponse?.articles?.length ?? 0,
           );
-        }
       },
     );
   }

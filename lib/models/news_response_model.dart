@@ -1,11 +1,16 @@
 class NewsResponseModel {
   NewsResponseModel({
-      this.status, 
-      this.totalResults, 
-      this.articles,});
+    this.status,
+    this.totalResults,
+    this.articles,
+    this.code,
+    this.message,
+  });
 
   NewsResponseModel.fromJson(dynamic json) {
     status = json['status'];
+    code = json['code'];
+    message = json['message'];
     totalResults = json['totalResults'];
     if (json['articles'] != null) {
       articles = [];
@@ -14,21 +19,25 @@ class NewsResponseModel {
       });
     }
   }
+
   String? status;
+  String? code;
+  String? message;
   int? totalResults;
   List<Articles>? articles;
 }
 
 class Articles {
   Articles({
-      this.source, 
-      this.author, 
-      this.title, 
-      this.description, 
-      this.url, 
-      this.urlToImage, 
-      this.publishedAt, 
-      this.content,});
+    this.source,
+    this.author,
+    this.title,
+    this.description,
+    this.url,
+    this.urlToImage,
+    this.publishedAt,
+    this.content,
+  });
 
   Articles.fromJson(dynamic json) {
     source = json['source'] != null ? Source.fromJson(json['source']) : null;
@@ -40,6 +49,7 @@ class Articles {
     publishedAt = json['publishedAt'];
     content = json['content'];
   }
+
   Source? source;
   String? author;
   String? title;
@@ -51,14 +61,13 @@ class Articles {
 }
 
 class Source {
-  Source({
-      this.id, 
-      this.name,});
+  Source({this.id, this.name});
 
   Source.fromJson(dynamic json) {
     id = json['id'];
     name = json['name'];
   }
+
   String? id;
   String? name;
 }

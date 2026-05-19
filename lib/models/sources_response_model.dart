@@ -1,11 +1,15 @@
 class SourcesResponseModel {
   String? status;
+  String? code;
+  String? message;
   List<Sources>? sources;
 
-  SourcesResponseModel({this.status, this.sources});
+  SourcesResponseModel({this.status, this.sources, this.code, this.message});
 
   SourcesResponseModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
+    code = json['code'];
+    message = json['message'];
     if (json['sources'] != null) {
       sources = <Sources>[];
       json['sources'].forEach((v) {
@@ -24,14 +28,15 @@ class Sources {
   String? language;
   String? country;
 
-  Sources(
-      {this.id,
-        this.name,
-        this.description,
-        this.url,
-        this.category,
-        this.language,
-        this.country});
+  Sources({
+    this.id,
+    this.name,
+    this.description,
+    this.url,
+    this.category,
+    this.language,
+    this.country,
+  });
 
   Sources.fromJson(Map<String, dynamic> json) {
     id = json['id'];
