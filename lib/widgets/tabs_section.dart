@@ -1,39 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart' show BlocProvider, BlocBuilder;
-import 'package:news_app/api/api_manager.dart';
 import 'package:news_app/bloc/cubit.dart';
 import 'package:news_app/bloc/states.dart';
-import 'package:news_app/models/sources_response_model.dart';
 import 'package:news_app/widgets/news_widget.dart';
 
-class TabsSection extends StatefulWidget {
+class TabsSection extends StatelessWidget {
   const TabsSection({super.key, required this.categoryName});
 
   final String categoryName;
-
-  @override
-  State<TabsSection> createState() => _TabsSectionState();
-}
-
-class _TabsSectionState extends State<TabsSection> {
-  int selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
 
 
     return BlocProvider(
-      create: (context) => HomeCubit()..getSources(categoryName: widget.categoryName),
+      create: (context) => HomeCubit()..getSources(categoryName: categoryName),
       child: BlocBuilder<HomeCubit, HomeStates>(
         builder: (context, state) {
           var homeCubit = BlocProvider.of<HomeCubit>(context);
-          if(state is GetSourcesLoadingState){
+          if(state is GetSourcesLoadingState || state is GetNewsLoadingState){
             return Center(
                 child: CircularProgressIndicator(
                   color: Color(0xff171717),
                 ),
             );
-          } else if(state is GetSourcesErrorState){
+          } else if(state is GetSourcesErrorState || state is GetNewsErrorState){
               return Center(
                 child: Text(
                   'Something Went Wrong, ${state.errorMessage}, Try Again Later',
@@ -45,7 +36,7 @@ class _TabsSectionState extends State<TabsSection> {
               children: [
                 SizedBox(height: 15),
                 DefaultTabController(
-                  initialIndex: selectedIndex,
+                  initialIndex: homeCubit.selectedIndex,
                   length:
                   homeCubit.sourcesResponse?.sources
                       ?.where((source) => source.name != null)
@@ -64,11 +55,8 @@ class _TabsSectionState extends State<TabsSection> {
                     padding: EdgeInsets.only(left: 8),
                     dividerColor: Colors.transparent,
                     onTap: (index) {
-                      if (index != selectedIndex) {
-                        selectedIndex = index;
-                        setState(() {
-
-                        });
+                      if (index != homeCubit.selectedIndex) {
+                        homeCubit.changeSelectedTab(index: index);
                       }
                     },
                     tabs:
@@ -83,9 +71,7 @@ class _TabsSectionState extends State<TabsSection> {
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: NewsWidget(
-                      sourceId: homeCubit.sourcesResponse?.sources?[selectedIndex].id ?? '',
-                    ),
+                    child: NewsWidget(),
                   ),
                 ),
               ],

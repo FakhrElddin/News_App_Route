@@ -1,44 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:news_app/api/api_manager.dart';
-import 'package:news_app/models/news_response_model.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:news_app/bloc/cubit.dart';
+import 'package:news_app/bloc/states.dart';
 import 'package:news_app/widgets/news_item.dart';
 
 class NewsWidget extends StatelessWidget {
-  const NewsWidget({super.key, required this.sourceId});
-  final String sourceId;
+  const NewsWidget({super.key,});
+
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<NewsResponseModel>(
-      future: ApiManager.getNews(sourceId: sourceId),
-      builder: (context, snapshot){
-        if(snapshot.connectionState == ConnectionState.waiting){
+    return BlocBuilder<HomeCubit, HomeStates>(
+      builder: (context, state) {
+        var homeCubit = BlocProvider.of<HomeCubit>(context);
+        if(state is GetNewsLoadingState){
           return Center(
-            child: CircularProgressIndicator(
-              color: Color(0xff171717),
-            ),
+            child: CircularProgressIndicator(color: Color(0xff171717)),
           );
-        }
-        if(snapshot.hasError){
+        } else if(state is GetNewsErrorState){
           return Center(
             child: Text(
-              'Something Went Wrong, Try Again Later',
+              'Something Went Wrong, ${state.errorMessage}, Try Again Later',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           );
+        } else{
+          return ListView.separated(
+            itemBuilder: (context, index) =>
+                NewsItem(articles: homeCubit.newsResponse!.articles![index]),
+            separatorBuilder: (context, index) => SizedBox(height: 16),
+            itemCount: homeCubit.newsResponse?.articles?.length ?? 0,
+          );
         }
-        return snapshot.data?.articles?.isNotEmpty ?? false ? ListView.separated(
-          itemBuilder: (context, index) => NewsItem(
-            articles: snapshot.data!.articles![index],
-          ),
-          separatorBuilder: (context, index) => SizedBox(height: 16,),
-          itemCount: snapshot.data?.articles?.length ?? 0,
-        ) : Center(
-          child: Text(
-            'There is no news for this source',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-        );
       },
     );
   }

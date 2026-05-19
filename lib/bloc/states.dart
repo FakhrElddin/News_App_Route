@@ -1,4 +1,7 @@
-abstract class HomeStates {}
+abstract class HomeStates {
+  final String? errorMessage;
+  HomeStates({this.errorMessage});
+}
 
 class HomeInitState extends HomeStates {}
 
@@ -7,9 +10,7 @@ class GetSourcesLoadingState extends HomeStates {}
 class GetSourcesSuccessState extends HomeStates {}
 
 class GetSourcesErrorState extends HomeStates {
-  final String errorMessage;
-
-  GetSourcesErrorState({required this.errorMessage});
+  GetSourcesErrorState({required String errorMessage}) : super(errorMessage: errorMessage);
 }
 
 class GetNewsLoadingState extends HomeStates {}
@@ -17,8 +18,7 @@ class GetNewsLoadingState extends HomeStates {}
 class GetNewsSuccessState extends HomeStates {}
 
 class GetNewsErrorState extends HomeStates {
-  final String errorMessage;
-
-  GetNewsErrorState({required this.errorMessage});
-
+  GetNewsErrorState({required String errorMessage}) : super(errorMessage: errorMessage);
 }
+
+class ChangeSelectedTabState extends HomeStates {}
