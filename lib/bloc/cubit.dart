@@ -1,16 +1,15 @@
-import 'dart:convert';
-
 import 'package:bloc/bloc.dart';
 import 'package:news_app/bloc/states.dart';
-import 'package:http/http.dart' as http;
 import 'package:news_app/models/news_response_model.dart';
 import 'package:news_app/models/sources_response_model.dart';
+import 'package:news_app/repository/home_repo.dart';
 
 class HomeCubit extends Cubit<HomeStates> {
-  HomeCubit() : super(HomeInitState());
+  HomeCubit(this.homeRepo) : super(HomeInitState());
   SourcesResponseModel? sourcesResponse;
   NewsResponseModel? newsResponse;
   int selectedIndex = 0;
+  HomeRepo homeRepo;
 
   void changeSelectedTab({required int index})async{
     selectedIndex = index;
@@ -21,13 +20,7 @@ class HomeCubit extends Cubit<HomeStates> {
   void getSources({required String categoryName}) async {
     try {
       emit(GetSourcesLoadingState());
-      Uri url = Uri.https("newsapi.org", "/v2/top-headlines/sources", {
-        "apiKey": "125b3eb6cee749ebb0c4534321ded29d",
-        "category": categoryName,
-      });
-      http.Response response = await http.get(url);
-      var json = jsonDecode(response.body);
-      sourcesResponse = SourcesResponseModel.fromJson(json);
+      sourcesResponse = await homeRepo.getSources(categoryName: categoryName);
       if(sourcesResponse!.status == 'ok'){
         emit(GetSourcesSuccessState());
         await getNews();
@@ -42,13 +35,7 @@ class HomeCubit extends Cubit<HomeStates> {
   Future<void> getNews()async{
     try{
       emit(GetNewsLoadingState());
-      Uri url = Uri.https("newsapi.org","/v2/everything",{
-        "apiKey" : "125b3eb6cee749ebb0c4534321ded29d",
-        "sources" : sourcesResponse?.sources?[selectedIndex].id ?? "",
-      });
-      http.Response response = await http.get(url);
-      var json = jsonDecode(response.body);
-      newsResponse = NewsResponseModel.fromJson(json);
+      newsResponse = await homeRepo.getNews(sourceId: sourcesResponse?.sources?[selectedIndex].id ?? '');
       if(newsResponse!.status == 'ok'){
         emit(GetNewsSuccessState());
       } else{
