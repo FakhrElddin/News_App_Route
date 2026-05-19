@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart' show BlocProvider, BlocBuilder;
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_app/bloc/cubit.dart';
 import 'package:news_app/bloc/states.dart';
 import 'package:news_app/widgets/news_widget.dart';
@@ -18,7 +18,7 @@ class TabsSection extends StatelessWidget {
       child: BlocBuilder<HomeCubit, HomeStates>(
         builder: (context, state) {
           var homeCubit = BlocProvider.of<HomeCubit>(context);
-          if(state is GetSourcesLoadingState || state is GetNewsLoadingState){
+          if(state is GetSourcesLoadingState){
             return Center(
                 child: CircularProgressIndicator(
                   color: Color(0xff171717),

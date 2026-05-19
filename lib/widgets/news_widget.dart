@@ -20,7 +20,7 @@ class NewsWidget extends StatelessWidget {
         } else if(state is GetNewsErrorState){
           return Center(
             child: Text(
-              'Something Went Wrong, ${state.errorMessage}, Try Again Later',
+              'Get News Articles Error, ${state.errorMessage}, Try Again Later',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           );

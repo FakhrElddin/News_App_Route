@@ -12,9 +12,9 @@ class HomeCubit extends Cubit<HomeStates> {
   NewsResponseModel? newsResponse;
   int selectedIndex = 0;
 
-  void changeSelectedTab({required int index}){
+  void changeSelectedTab({required int index})async{
     selectedIndex = index;
-    getNews();
+    await getNews();
     emit(ChangeSelectedTabState());
   }
 
@@ -29,13 +29,13 @@ class HomeCubit extends Cubit<HomeStates> {
       var json = jsonDecode(response.body);
       sourcesResponse = SourcesResponseModel.fromJson(json);
       emit(GetSourcesSuccessState());
-      getNews();
+      await getNews();
     } catch (e) {
       emit(GetSourcesErrorState(errorMessage: e.toString()));
     }
   }
 
-  void getNews()async{
+  Future<void> getNews()async{
     try{
       emit(GetNewsLoadingState());
       Uri url = Uri.https("newsapi.org","/v2/everything",{
