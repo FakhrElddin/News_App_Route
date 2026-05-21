@@ -16,7 +16,8 @@ class TabsSection extends StatelessWidget {
 
 
     return BlocProvider(
-      create: (context) => HomeCubit(HomeRepoImplementation())..getSources(categoryName: categoryName),
+      create: (context) => HomeCubit()..getSources(categoryName: categoryName),
+      //create: (context) => HomeCubit(HomeRepoImplementation())..getSources(categoryName: categoryName),
       child: BlocConsumer<HomeCubit, HomeStates>(
         listener: (context, state) {
           if(state is GetSourcesErrorState){
