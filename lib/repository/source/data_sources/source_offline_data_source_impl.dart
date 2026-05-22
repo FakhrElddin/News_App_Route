@@ -6,9 +6,8 @@ class SourceOfflineDataSourceImpl implements SourceOfflineDataSource{
   @override
   Future<SourcesResponseModel> getSources({required String categoryName}) async{
     var box = await Hive.openBox('SourcesTab');
-    var data = box.get(categoryName);
-    if(data != null){
-      var sources = SourcesResponseModel.fromJson(data);
+    var sources = box.get(categoryName);
+    if(sources != null){
       return sources;
     }
     return SourcesResponseModel(
@@ -20,7 +19,7 @@ class SourceOfflineDataSourceImpl implements SourceOfflineDataSource{
   @override
   void saveSources({required SourcesResponseModel sourcesResponse, required String categoryName}) async{
     var box = await Hive.openBox('SourcesTab');
-    await box.put(categoryName, sourcesResponse.toJson());
+    await box.put(categoryName, sourcesResponse);
     await box.close();
   }
 }
