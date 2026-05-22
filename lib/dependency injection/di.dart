@@ -1,3 +1,5 @@
+import 'package:news_app/repository/news/data_source/news_offline_data_source.dart';
+import 'package:news_app/repository/news/data_source/news_offline_data_source_impl.dart';
 import 'package:news_app/repository/news/data_source/news_remote_data_source.dart';
 import 'package:news_app/repository/news/data_source/news_remote_data_source_impl.dart';
 import 'package:news_app/repository/news/repository/news_repository.dart';
@@ -25,7 +27,14 @@ SourceOfflineDataSource injectSourceOfflineDataSource(){
 }
 
 NewsRepository injectNewsRepository(){
-  return NewsRepositoryImpl(remoteDataSource: injectNewsRemoteDataSource());
+  return NewsRepositoryImpl(
+    remoteDataSource: injectNewsRemoteDataSource(),
+    offlineDataSource: injectNewsOfflineDataSource(),
+  );
+}
+
+NewsOfflineDataSource injectNewsOfflineDataSource(){
+  return NewsOfflineDataSourceImpl();
 }
 
 NewsRemoteDataSource injectNewsRemoteDataSource(){

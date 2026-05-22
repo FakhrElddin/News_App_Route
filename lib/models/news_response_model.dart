@@ -1,4 +1,8 @@
-class NewsResponseModel {
+import 'package:hive/hive.dart';
+part 'news_response_model.g.dart';
+
+@HiveType(typeId: 3)
+class NewsResponseModel extends HiveObject{
   NewsResponseModel({
     this.status,
     this.totalResults,
@@ -36,14 +40,20 @@ class NewsResponseModel {
     return data;
   }
 
+  @HiveField(0)
   String? status;
+  @HiveField(1)
   String? code;
+  @HiveField(2)
   String? message;
+  @HiveField(3)
   int? totalResults;
+  @HiveField(4)
   List<Articles>? articles;
 }
 
-class Articles {
+@HiveType(typeId: 4)
+class Articles extends HiveObject{
   Articles({
     this.source,
     this.author,
@@ -70,13 +80,21 @@ class Articles {
     content = data['content'];
   }
 
+  @HiveField(0)
   Source? source;
+  @HiveField(1)
   String? author;
+  @HiveField(2)
   String? title;
+  @HiveField(3)
   String? description;
+  @HiveField(4)
   String? url;
+  @HiveField(5)
   String? urlToImage;
+  @HiveField(6)
   String? publishedAt;
+  @HiveField(7)
   String? content;
 
   Map<String, dynamic> toJson() {
@@ -95,7 +113,8 @@ class Articles {
   }
 }
 
-class Source {
+@HiveType(typeId: 5)
+class Source extends HiveObject{
   Source({this.id, this.name});
 
   Source.fromJson(dynamic json) {
@@ -107,7 +126,9 @@ class Source {
     name = data['name'];
   }
 
+  @HiveField(0)
   String? id;
+  @HiveField(1)
   String? name;
 
   Map<String, dynamic> toJson() {
