@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:news_app/bloc/states.dart';
 import 'package:news_app/models/news_response_model.dart';
 import 'package:news_app/models/sources_response_model.dart';
-import 'package:news_app/repository/news/respository/news_repository.dart';
+import 'package:news_app/repository/news/repository/news_repository.dart';
 import 'package:news_app/repository/source/repository/source_repository.dart';
 
 class HomeCubit extends Cubit<HomeStates> {
@@ -12,6 +12,7 @@ class HomeCubit extends Cubit<HomeStates> {
   int selectedIndex = 0;
   late SourceRepository sourceRepository;
   late NewsRepository newsRepository;
+  late String category;
 
   void changeSelectedTab({required int index})async{
     selectedIndex = index;
@@ -22,6 +23,7 @@ class HomeCubit extends Cubit<HomeStates> {
   void getSources({required String categoryName}) async {
     try {
       emit(GetSourcesLoadingState());
+      category = categoryName;
       sourcesResponse = await sourceRepository.getSources(categoryName: categoryName);
       if(sourcesResponse!.status == 'ok'){
         emit(GetSourcesSuccessState());
@@ -37,7 +39,10 @@ class HomeCubit extends Cubit<HomeStates> {
   Future<void> getNews()async{
     try{
       emit(GetNewsLoadingState());
-      newsResponse = await newsRepository.getNews(sourceId: sourcesResponse?.sources?[selectedIndex].id ?? '');
+      newsResponse = await newsRepository.getNews(
+        sourceId: sourcesResponse?.sources?[selectedIndex].id ?? '',
+        categoryName: category,
+      );
       if(newsResponse!.status == 'ok'){
         emit(GetNewsSuccessState());
       } else{
