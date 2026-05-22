@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:news_app/bloc/states.dart';
 import 'package:news_app/models/news_response_model.dart';
 import 'package:news_app/models/sources_response_model.dart';
-import 'package:news_app/repository/news/respository/news_repository.dart';
+import 'package:news_app/repository/news/repository/news_repository.dart';
 import 'package:news_app/repository/source/repository/source_repository.dart';
 
 class HomeCubit extends Cubit<HomeStates> {

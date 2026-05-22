@@ -8,16 +8,32 @@ class NewsResponseModel {
   });
 
   NewsResponseModel.fromJson(dynamic json) {
-    status = json['status'];
-    code = json['code'];
-    message = json['message'];
-    totalResults = json['totalResults'];
-    if (json['articles'] != null) {
+    if (json == null) return;
+
+    final Map<String, dynamic> data = Map<String, dynamic>.from(json);
+
+    status = data['status'];
+    code = data['code'];
+    message = data['message'];
+    totalResults = data['totalResults'];
+    if (data['articles'] != null) {
       articles = [];
-      json['articles'].forEach((v) {
+      data['articles'].forEach((v) {
         articles?.add(Articles.fromJson(v));
       });
     }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['status'] = status;
+    data['code'] = code;
+    data['message'] = message;
+    data['totalResults'] = totalResults;
+    if (articles != null) {
+      data['articles'] = articles?.map((v) => v.toJson()).toList();
+    }
+    return data;
   }
 
   String? status;
@@ -40,14 +56,18 @@ class Articles {
   });
 
   Articles.fromJson(dynamic json) {
-    source = json['source'] != null ? Source.fromJson(json['source']) : null;
-    author = json['author'];
-    title = json['title'];
-    description = json['description'];
-    url = json['url'];
-    urlToImage = json['urlToImage'];
-    publishedAt = json['publishedAt'];
-    content = json['content'];
+    if (json == null) return;
+
+    final Map<String, dynamic> data = Map<String, dynamic>.from(json);
+
+    source = data['source'] != null ? Source.fromJson(data['source']) : null;
+    author = data['author'];
+    title = data['title'];
+    description = data['description'];
+    url = data['url'];
+    urlToImage = data['urlToImage'];
+    publishedAt = data['publishedAt'];
+    content = data['content'];
   }
 
   Source? source;
@@ -58,16 +78,42 @@ class Articles {
   String? urlToImage;
   String? publishedAt;
   String? content;
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (source != null) {
+      data['source'] = source?.toJson();
+    }
+    data['author'] = author;
+    data['title'] = title;
+    data['description'] = description;
+    data['url'] = url;
+    data['urlToImage'] = urlToImage;
+    data['publishedAt'] = publishedAt;
+    data['content'] = content;
+    return data;
+  }
 }
 
 class Source {
   Source({this.id, this.name});
 
   Source.fromJson(dynamic json) {
-    id = json['id'];
-    name = json['name'];
+    if (json == null) return;
+
+    final Map<String, dynamic> data = Map<String, dynamic>.from(json);
+
+    id = data['id'];
+    name = data['name'];
   }
 
   String? id;
   String? name;
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
+    return data;
+  }
 }
