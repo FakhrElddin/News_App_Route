@@ -1,10 +1,11 @@
 import 'dart:convert';
 
+import 'package:injectable/injectable.dart';
 import 'package:news_app/models/news_response_model.dart';
 import 'package:news_app/repository/news/data_source/news_remote_data_source.dart';
 import 'package:http/http.dart' as http;
 
-
+@Injectable(as: NewsRemoteDataSource)
 class NewsRemoteDataSourceImpl implements NewsRemoteDataSource{
   @override
   Future<NewsResponseModel> getNews({required String sourceId}) async{

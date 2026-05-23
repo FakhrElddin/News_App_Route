@@ -1,10 +1,12 @@
 import 'package:bloc/bloc.dart';
+import 'package:injectable/injectable.dart';
 import 'package:news_app/bloc/states.dart';
 import 'package:news_app/models/news_response_model.dart';
 import 'package:news_app/models/sources_response_model.dart';
 import 'package:news_app/repository/news/repository/news_repository.dart';
 import 'package:news_app/repository/source/repository/source_repository.dart';
 
+@injectable
 class HomeCubit extends Cubit<HomeStates> {
   HomeCubit({required this.sourceRepository, required this.newsRepository}) : super(HomeInitState());
   SourcesResponseModel? sourcesResponse;
