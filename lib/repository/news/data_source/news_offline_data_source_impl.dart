@@ -1,7 +1,9 @@
 import 'package:hive/hive.dart';
+import 'package:injectable/injectable.dart';
 import 'package:news_app/models/news_response_model.dart';
 import 'package:news_app/repository/news/data_source/news_offline_data_source.dart';
 
+@Injectable(as: NewsOfflineDataSource)
 class NewsOfflineDataSourceImpl implements NewsOfflineDataSource {
   @override
   Future<NewsResponseModel> getNews({required String sourceId, required String categoryName}) async{

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_app/bloc/cubit.dart';
 import 'package:news_app/bloc/states.dart';
-import 'package:news_app/dependency%20injection/di.dart';
+import 'package:news_app/dependency%20injection/di_inject.dart';
 import 'package:news_app/widgets/news_widget.dart';
 
 class TabsSection extends StatelessWidget {
@@ -16,10 +16,7 @@ class TabsSection extends StatelessWidget {
 
 
     return BlocProvider(
-      create: (context) => HomeCubit(
-        sourceRepository: injectSourceRepository(),
-        newsRepository: injectNewsRepository(),
-      )
+      create: (context) => getIt<HomeCubit>()
         ..getSources(categoryName: categoryName),
       child: BlocConsumer<HomeCubit, HomeStates>(
         listener: (context, state) {
